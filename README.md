@@ -1,4 +1,4 @@
-[Items and properties]
+### Items and properties ###
 
 In order to make api requests, you will need an access token.
 
@@ -36,7 +36,6 @@ Sample response:
         }
       ]
     }
-
     }
    ],
   "hydra:totalItems": 1

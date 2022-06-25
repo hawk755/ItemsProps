@@ -5,8 +5,13 @@ namespace App\Entity;
 use ApiPlatform\Core\Annotation\ApiResource;
 use App\Repository\PropertyRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Validator\Constraints as Assert;
 
-#[ApiResource()]
+#[ApiResource(
+    collectionOperations: ['post'],
+    itemOperations: ['get'],
+)]
 #[ORM\Entity(repositoryClass: PropertyRepository::class)]
 class Property
 {
@@ -18,6 +23,10 @@ class Property
 
     /** Property Value */
     #[ORM\Column(type: 'string', length: 255)]
+    #[
+        Assert\NotBlank,
+        Groups(['item.read'])
+    ]
     private $value;
 
     /** Item */

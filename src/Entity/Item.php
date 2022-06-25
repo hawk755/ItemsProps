@@ -7,8 +7,15 @@ use App\Repository\ItemRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Validator\Constraints as Assert;
 
-#[ApiResource()]
+#[ApiResource(
+    collectionOperations: ['get', 'post'],
+    itemOperations: ['get', 'delete', 'patch'],
+    attributes: ['pagination_items_per_page' => 10],
+    normalizationContext: ['groups' => ['item.read']],
+)]
 #[ORM\Entity(repositoryClass: ItemRepository::class)]
 class Item
 {
@@ -20,9 +27,14 @@ class Item
 
     /** Item Name */
     #[ORM\Column(type: 'string', length: 255)]
+    #[
+        Assert\NotBlank,
+        Groups(['item.read'])
+    ]
     private $name;
 
     #[ORM\OneToMany(mappedBy: 'item', targetEntity: Property::class, orphanRemoval: true)]
+    #[Groups(['item.read'])]
     private $properties;
 
     public function __construct()

@@ -15,7 +15,7 @@ class ItemsTest extends ApiTestCase
 
     public function testListItems()
     {
-        $response = static::createClient()->request('GET', '/api/items');
+        $response = $this->makeRequest('GET', '/api/items');
 
         $this->assertResponseIsSuccessful();
 
@@ -33,7 +33,7 @@ class ItemsTest extends ApiTestCase
 
     public function testItemAdd()
     {
-        static::createClient()->request('POST', '/api/items', [
+        $this->makeRequest('POST', '/api/items', [
             'json' => [
                 'name' => 'Ice Cream',
             ],
@@ -50,7 +50,7 @@ class ItemsTest extends ApiTestCase
 
     public function testItemChange()
     {
-        static::createClient()->request('PUT', '/api/items/1', [
+        $this->makeRequest('PUT', '/api/items/1', [
             'json' => [
                 'name' => 'Pizza',
             ],
@@ -68,14 +68,14 @@ class ItemsTest extends ApiTestCase
 
     public function testItemDelete()
     {
-        static::createClient()->request('DELETE', '/api/items/2');
+        $this->makeRequest('DELETE', '/api/items/2');
 
         $this->assertResponseStatusCodeSame(204);
     }
 
     public function testItemPropertyAdd()
     {
-        static::createClient()->request('POST', '/api/properties', [
+        $this->makeRequest('POST', '/api/properties', [
             'json' => [
                 'value' => 'Attractive',
                 'item' => '/api/items/1',
@@ -93,7 +93,7 @@ class ItemsTest extends ApiTestCase
 
     public function testItemPropertyAddInvalid()
     {
-        static::createClient()->request('POST', '/api/properties', [
+        $this->makeRequest('POST', '/api/properties', [
             'json' => [
                 'value' => 'Unattractive',
                 'item' => null,
@@ -107,5 +107,21 @@ class ItemsTest extends ApiTestCase
         $this->assertJsonContains([
             'hydra:title' => 'An error occurred',
         ]);
+    }
+
+    public function testRequestWithoutApiKey()
+    {
+        static::createClient()->request('GET', '/api/items');
+        $this->assertResponseStatusCodeSame(403);
+    }
+
+    private function makeRequest(string $method, string $url, array $options = [])
+    {
+        if (!isset($options['headers'])) {
+            $options['headers'] = [];
+        }
+        $options['headers']['X-API-KEY'] = $_ENV['X_API_KEY'];
+
+        return static::createClient()->request($method, $url, $options);
     }
 }

@@ -1,0 +1,4 @@
+App\Entity\Property:
+  property_{1..100}:
+    value: <name()>
+    item: '@item_*'

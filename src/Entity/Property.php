@@ -31,7 +31,7 @@ class Property
 
     /** Item */
     #[ORM\ManyToOne(targetEntity: Item::class, inversedBy: 'properties')]
-    #[ORM\JoinColumn(nullable: false)]
+    #[ORM\JoinColumn(nullable: false, onDelete: 'CASCADE')]
     private $item;
 
     public function getId(): ?int

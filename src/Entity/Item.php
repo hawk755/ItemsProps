@@ -12,7 +12,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 #[ApiResource(
     collectionOperations: ['get', 'post'],
-    itemOperations: ['get', 'delete', 'patch'],
+    itemOperations: ['get', 'delete', 'put'],
     attributes: ['pagination_items_per_page' => 10],
     normalizationContext: ['groups' => ['item.read']],
 )]

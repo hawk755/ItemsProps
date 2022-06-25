@@ -22,8 +22,13 @@ class RestrictIpAddressSubscriber implements EventSubscriberInterface
         if (!$event->isMainRequest()) {
             return;
         }
+        $request = $event->getRequest();
 
-        if ($event->getRequest()->headers->get('X-API-KEY') !== $this->X_API_KEY) {
+        if ('api_entrypoint' == $request->attributes->get('_route')) {
+            return;
+        }
+
+        if ($request->headers->get('X-API-KEY') !== $this->X_API_KEY) {
             throw new AccessDeniedHttpException('Access Denied');
         }
     }

@@ -9,7 +9,8 @@ All possible requests and their parameters can be viewed using "/api" endpoint.
 You can find examples with sample JSON data below.
 
 
-1. Retrieve the collection of Items
+1. Retrieve the collection of Items 
+(limited to 10 at a time, use "page=2" to get the next set)
 
 curl -X 'GET' \
   'https://127.0.0.1:8000/api/items?page=1' \
